@@ -317,8 +317,109 @@ class Memory:
         return label, sim
 
 
-            
-            
+    # train by adaptively writing new examples as new prototypes
+    def train_sub_cluster(self, v, vClass, threshold=0.6):
+        # make sure type is correct
+        if not isinstance(v, (Vector, np.ndarray)):
+            raise TypeError("Unsupported type for vector space")
+        else:
+            if isinstance(v, Vector):
+                if v.dim != self.dim:
+                    raise TypeError("Vector dimensions do not agree")
+                else:
+                    v = v.value
+            else:
+                if v.ndim > 1:
+                    if v.shape[1] != self.dim:
+                        raise TypeError("Vector dimensions do not agree")
+                else:
+                    if len(v) != self.dim:
+                        raise TypeError("Vector dimensions do not agree")
+
+        classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
+        if classIdx:
+            if v.ndim > 1:
+                for i in range(v.shape[0]):
+                    label, sim = self.match(v[i,:])
+                    sim = sim[0,classIdx]
+                    bestMatch = np.argmax(sim)
+                    if sim[bestMatch] > threshold:
+                        self.vec[classIdx[bestMatch],:] = self.vec[classIdx[bestMatch],:] + v[i,:]
+                    else:
+                        self.classes.append(vClass)
+                        vClust = max([self.clusters[idx] for idx in classIdx]) + 1
+                        self.clusters.append(vClust)
+                        self.vec = np.concatenate((self.vec, [v[i,:]]))
+            else:
+                label, sim = self.match(v)
+                sim = sim[0,classIdx]
+                bestMatch = np.argmax(sim)
+                if sim[bestMatch] > threshold:
+                    self.vec[classIdx[bestMatch],:] = self.vec[classIdx[bestMatch],:] + v
+                else:
+                    self.classes.append(vClass)
+                    vClust = max([self.clusters[idx] for idx in classIdx]) + 1
+                    self.clusters.append(vClust)
+                    self.vec = np.concatenate((self.vec, [v]))
+        else:
+            if v.ndim > 1:
+                self.classes.append(vClass)
+                self.clusters.append(0)
+                self.vec = np.concatenate((self.vec, [v[0,:]]))
+                classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
+                for i in range(1,v.shape[0]):
+                    label, sim = self.match(v[i,:])
+                    sim = sim[0,classIdx]
+                    bestMatch = np.argmax(sim)
+                    if sim[bestMatch] > threshold:
+                        self.vec[classIdx[bestMatch],:] = self.vec[classIdx[bestMatch],:] + v[i,:]
+                    else:
+                        self.classes.append(vClass)
+                        vClust = max([self.clusters[idx] for idx in classIdx]) + 1
+                        self.clusters.append(vClust)
+                        self.vec = np.concatenate((self.vec, [v[i,:]]))
+            else:
+                self.classes.append(vClass)
+                self.clusters.append(0)
+                self.vec = np.concatenate((self.vec, [v]))
+
+
+
+        # if vClass == None: # no specified class, so add as a new class and new cluster
+        #     if self.classes:
+        #         vClass = max(self.classes) + 1
+        #     else:
+        #         vClass = 0
+        #     vClust = 0
+        #     self.classes.append(vClass)
+        #     self.clusters.append(vClust)
+        #     self.vec = np.concatenate((self.vec, [v]))
+        # elif vClust == None: # class is specified, but not cluster, so add as new cluster in class
+        #     classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
+        #     if classIdx:
+        #         vClust = max([self.clusters[idx] for idx in classIdx]) + 1
+        #     else:
+        #         vClust = 0
+        #     self.classes.append(vClass)
+        #     self.clusters.append(vClust)
+        #     self.vec = np.concatenate((self.vec, [v]))
+        # else: # class and cluster are specified, so check if it already exists
+        #     if vClass in self.classes:
+        #         # class already exists, need to check for cluster
+        #         classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
+        #         clusterIdx = [idx for idx in classIdx if self.clusters[idx] == vClust]
+        #         if not clusterIdx:
+        #             self.classes.append(vClass)
+        #             self.clusters.append(vClust)
+        #             self.vec = np.concatenate((self.vec, [v]))
+        #         else:
+        #             self.vec[clusterIdx,:] =  self.vec[clusterIdx,:] + v
+        #     else:
+        #         self.classes.append(vClass)
+        #         self.clusters.append(vClust)
+        #         self.vec = np.concatenate((self.vec, [v]))
+
+        # return vClass, vClust
             
             
             
