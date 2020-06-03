@@ -123,106 +123,199 @@ class Memory:
     # init vector space
     def __init__(self, dim=10000):
         self.dim = dim
-        self.vectors = {}
-        self.names = []
-        self.array = np.empty((0,dim))
+        self.vec = np.empty((0,dim))
+        self.biVec = np.empty((0,dim))
+        self.classes = []
+        self.clusters = []
         
-    # make sure array matches dict
-    def _reset_array(self):
-        self.array = np.empty((0,self.dim))
-        self.names = []
-        for v in self.vectors:
-            self.array = np.concatenate((self.array,[self.vectors[v].value]))
-            self.names.append(v)
-        
-    # create random name for vectors
-    def _random_name(self):
-        tempName = ''.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ') for i in range(8))
-        while tempName in self.vectors:
-            tempName = ''.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ') for i in range(8))
-        return tempName
-    
     # print the space
     def __repr__(self):
-        return ''.join("'%s' , %s\n" % (v, self.vectors[v]) for v in self.vectors)
+        return ''.join("Class %d, Cluster %d: %s\n" % (self.classes[v], self.clusters[v], str(self.vec[v,:])) for v in range(len(self.classes)))
     
-    # add in a new, random vector
-    def add(self, name=None):
-        if name == None:
-            name = self._random_name()
-        v = Vector(self.dim)
-        self.vectors[name] = v
-        self._reset_array()
-        return v
-    
-    # add in an already created vector
-    def insert(self, v, name=None):
-        if isinstance(v, Vector):
-            if v.dim == self.dim:
-                if name == None:
-                    name = self._random_name()
-                newV = Vector(self.dim)
-                newV.value = v.value
-                self.vectors[name] = newV
-                self._reset_array()
-                return name
-            else:
-                raise TypeError("Vector dimensions do not agree")
-        else:
+    # write a new vector into space
+    def write(self, v, vClass=None, vClust=None):
+        # make sure type is correct, and sum along elements if ndarray
+        if not isinstance(v, (Vector, np.ndarray)):
             raise TypeError("Unsupported type for vector space")
-            
-    # train a prototype vector
-    def train(self, v, name=None):
-        if isinstance(v, Vector):
-            value = v.value
-        elif isinstance(v, np.ndarray):
-            value = v
         else:
-            raise TypeError("Unsupported type for training")
-        newVec = Vector(self.dim)
-        newVec.value = value
-        if name == None:
-            name = self._random_name()
-        elif name in self.vectors:
-            self.vectors[name].accumulate(newVec)
+            if isinstance(v, Vector):
+                if v.dim != self.dim:
+                    raise TypeError("Vector dimensions do not agree")
+                else:
+                    v = v.value
+            else:
+                if v.ndim > 1:
+                    if v.shape[1] != self.dim:
+                        raise TypeError("Vector dimensions do not agree")
+                    else:
+                        v = v.sum(axis=0)
+                else:
+                    if len(v) != self.dim:
+                        raise TypeError("Vector dimensions do not agree")
+
+        # determine where to store
+        if vClass == None: # no specified class, so add as a new class and new cluster
+            if self.classes:
+                vClass = max(self.classes) + 1
+            else:
+                vClass = 0
+            vClust = 0
+            self.classes.append(vClass)
+            self.clusters.append(vClust)
+            self.vec = np.concatenate((self.vec, [v]))
+        elif vClust == None: # class is specified, but not cluster, so add as new cluster in class
+            classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
+            if classIdx:
+                vClust = max([self.clusters[idx] for idx in classIdx]) + 1
+            else:
+                vClust = 0
+            self.classes.append(vClass)
+            self.clusters.append(vClust)
+            self.vec = np.concatenate((self.vec, [v]))
+        else: # class and cluster are specified, so check if it already exists
+            if vClass in self.classes:
+                # class already exists, need to check for cluster
+                classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
+                clusterIdx = [idx for idx in classIdx if self.clusters[idx] == vClust]
+                if not clusterIdx:
+                    self.classes.append(vClass)
+                    self.clusters.append(vClust)
+                    self.vec = np.concatenate((self.vec, [v]))
+                else:
+                    self.vec[clusterIdx,:] = v
+            else:
+                self.classes.append(vClass)
+                self.clusters.append(vClust)
+                self.vec = np.concatenate((self.vec, [v]))
+
+        return vClass, vClust
+
+    # remove class or clusters from memory
+    def remove(self, vClass, vClust=None):
+        if vClust == None:
+            keepIdx = [idx for idx, val in enumerate(self.classes) if val != vClass]
+            self.classes = [self.classes[idx] for idx in keepIdx]
+            self.clusters = [self.clusters[idx] for idx in keepIdx]
+            deleteIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
+            self.vec = np.delete(self.vec,deleteIdx,axis=0)
         else:
-            self.vectors[name] = newVec
-        self._reset_array()
-        
+            classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
+            clusterIdx = [idx for idx in classIdx if self.clusters[idx] == vClust]
+            self.vec = np.delete(self.vec,clusterIdx,axis=0)
+            keepIdx = [idx for idx in range(len(self.clusters)) if idx not in clusterIdx]
+            self.classes = [self.classes[idx] for idx in keepIdx]
+            self.clusters = [self.clusters[idx] for idx in keepIdx]
+
+    # remove class or clusters from memory
+    def read(self, vClass=None, vClust=None):
+        if vClass == None: # no specified class, return all of memory
+            return self.classes, self.clusters, self.vec
+        elif vClust == None: # specified class, but not cluster, so return all clusters of that class
+            classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
+            classes = [self.classes[idx] for idx in classIdx]
+            clusters = [self.clusters[idx] for idx in classIdx]
+            vec = self.vec[classIdx,:]
+            return classes, clusters, vec
+        else: # specified both class and cluster
+            classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
+            clusterIdx = [idx for idx in classIdx if self.clusters[idx] == vClust]
+            classes = [self.classes[idx] for idx in clusterIdx]
+            clusters = [self.clusters[idx] for idx in clusterIdx]
+            vec = self.vec[clusterIdx,:]
+            return classes, clusters, vec
+
+    # train by accumulating a new vector into space
+    def train(self, v, vClass=None, vClust=None):
+        # make sure type is correct, and sum along elements if ndarray
+        if not isinstance(v, (Vector, np.ndarray)):
+            raise TypeError("Unsupported type for vector space")
+        else:
+            if isinstance(v, Vector):
+                if v.dim != self.dim:
+                    raise TypeError("Vector dimensions do not agree")
+                else:
+                    v = v.value
+            else:
+                if v.ndim > 1:
+                    if v.shape[1] != self.dim:
+                        raise TypeError("Vector dimensions do not agree")
+                    else:
+                        v = v.sum(axis=0)
+                else:
+                    if len(v) != self.dim:
+                        raise TypeError("Vector dimensions do not agree")
+
+        # determine where to store
+        if vClass == None: # no specified class, so add as a new class and new cluster
+            if self.classes:
+                vClass = max(self.classes) + 1
+            else:
+                vClass = 0
+            vClust = 0
+            self.classes.append(vClass)
+            self.clusters.append(vClust)
+            self.vec = np.concatenate((self.vec, [v]))
+        elif vClust == None: # class is specified, but not cluster, so add as new cluster in class
+            classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
+            if classIdx:
+                vClust = max([self.clusters[idx] for idx in classIdx]) + 1
+            else:
+                vClust = 0
+            self.classes.append(vClass)
+            self.clusters.append(vClust)
+            self.vec = np.concatenate((self.vec, [v]))
+        else: # class and cluster are specified, so check if it already exists
+            if vClass in self.classes:
+                # class already exists, need to check for cluster
+                classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
+                clusterIdx = [idx for idx in classIdx if self.clusters[idx] == vClust]
+                if not clusterIdx:
+                    self.classes.append(vClass)
+                    self.clusters.append(vClust)
+                    self.vec = np.concatenate((self.vec, [v]))
+                else:
+                    self.vec[clusterIdx,:] =  self.vec[clusterIdx,:] + v
+            else:
+                self.classes.append(vClass)
+                self.clusters.append(vClust)
+                self.vec = np.concatenate((self.vec, [v]))
+
+        return vClass, vClust
 
     # search for nearest neighbor in the space
-    def find(self, v):
-        if isinstance(v, Vector):
-            if v.dim == self.dim:
-                a = v.value
-            else:
-                raise TypeError("Vector dimensions do not agree")
-        elif isinstance(v, Memory):
-            if v.dim == self.dim:
-                a = v.array
-            else:
-                raise TypeError("Vector dimensions do not agree")
-        elif isinstance(v, np.ndarray):
-            if v.shape[1] == self.dim:
-                a = v
-            else:
-                raise TypeError("Vector dimensions do not agree")
+    def match(self, v, bipolar=False):
+        # make sure datatype is correct
+        if not isinstance(v, (Vector, np.ndarray)):
+            raise TypeError("Unsupported type for vector space")
         else:
-            raise TypeError("Unsupported type for vector comparison")
-        b = self.array
-        x = a @ b.T
-        y = np.outer(np.linalg.norm(a.T,axis=0), np.linalg.norm(b.T,axis=0))
-        sim = x/y
-#         print(np.argmax(sim,axis=1))
-        maxIdx = np.argmax(sim,axis=1)
-        label = [self.names[i] for i in maxIdx]
-        return sim, label
-    
-    def bipolarize(self):
-        for v in self.vectors:
-            self.vectors[v].bipolarize()
+            if isinstance(v, Vector):
+                if v.dim != self.dim:
+                    raise TypeError("Vector dimensions do not agree")
+                else:
+                    v = v.value
+            else:
+                if v.ndim > 1:
+                    if v.shape[1] != self.dim:
+                        raise TypeError("Vector dimensions do not agree")
+                else:
+                    if len(v) != self.dim:
+                        raise TypeError("Vector dimensions do not agree")
 
-            
+        am = self.vec
+        if bipolar:
+            z = am
+            z[z > 0] = 1.0
+            z[z < 0] = -1.0
+            z[z == 0] = np.random.choice([-1.0, 1.0], size=len(z[z == 0]))
+            am = z
+
+        x = v @ am.T
+        y = np.outer(np.linalg.norm(v.T,axis=0), np.linalg.norm(am.T,axis=0))
+        sim = x/y
+        maxIdx = np.argmax(sim,axis=1)
+        label = [self.classes[i] for i in maxIdx]
+        return label, sim
+
 
             
             
