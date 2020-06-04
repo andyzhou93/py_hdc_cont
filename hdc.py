@@ -301,7 +301,7 @@ class Memory:
                     if len(v) != self.dim:
                         raise TypeError("Vector dimensions do not agree")
 
-        am = self.vec
+        am = np.copy(self.vec)
         if bipolar:
             z = am
             z[z > 0] = 1.0
@@ -350,6 +350,7 @@ class Memory:
                         vClust = max([self.clusters[idx] for idx in classIdx]) + 1
                         self.clusters.append(vClust)
                         self.vec = np.concatenate((self.vec, [v[i,:]]))
+                    classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
             else:
                 label, sim = self.match(v)
                 sim = sim[0,classIdx]
@@ -366,8 +367,8 @@ class Memory:
                 self.classes.append(vClass)
                 self.clusters.append(0)
                 self.vec = np.concatenate((self.vec, [v[0,:]]))
-                classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
                 for i in range(1,v.shape[0]):
+                    classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
                     label, sim = self.match(v[i,:])
                     sim = sim[0,classIdx]
                     bestMatch = np.argmax(sim)
@@ -382,54 +383,22 @@ class Memory:
                 self.classes.append(vClass)
                 self.clusters.append(0)
                 self.vec = np.concatenate((self.vec, [v]))
-
-
-
-        # if vClass == None: # no specified class, so add as a new class and new cluster
-        #     if self.classes:
-        #         vClass = max(self.classes) + 1
-        #     else:
-        #         vClass = 0
-        #     vClust = 0
-        #     self.classes.append(vClass)
-        #     self.clusters.append(vClust)
-        #     self.vec = np.concatenate((self.vec, [v]))
-        # elif vClust == None: # class is specified, but not cluster, so add as new cluster in class
-        #     classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
-        #     if classIdx:
-        #         vClust = max([self.clusters[idx] for idx in classIdx]) + 1
-        #     else:
-        #         vClust = 0
-        #     self.classes.append(vClass)
-        #     self.clusters.append(vClust)
-        #     self.vec = np.concatenate((self.vec, [v]))
-        # else: # class and cluster are specified, so check if it already exists
-        #     if vClass in self.classes:
-        #         # class already exists, need to check for cluster
-        #         classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
-        #         clusterIdx = [idx for idx in classIdx if self.clusters[idx] == vClust]
-        #         if not clusterIdx:
-        #             self.classes.append(vClass)
-        #             self.clusters.append(vClust)
-        #             self.vec = np.concatenate((self.vec, [v]))
-        #         else:
-        #             self.vec[clusterIdx,:] =  self.vec[clusterIdx,:] + v
-        #     else:
-        #         self.classes.append(vClass)
-        #         self.clusters.append(vClust)
-        #         self.vec = np.concatenate((self.vec, [v]))
-
-        # return vClass, vClust
             
             
-            
-            
-            
-            
-            
-            
-            
-            
+    # prune unuseful vectors
+    def prune(self, threshold=101, min=1):
+        uniqClass = np.unique(self.classes)
+        for c in uniqClass:
+            classIdx = [idx for idx, val in enumerate(self.classes) if val == c]
+            if len(classIdx) > min:
+                norms = np.linalg.norm(self.vec[classIdx,:], axis=1)
+                deleteIdx = [classIdx[idx] for idx, val in enumerate(norms) if val < threshold]
+                while len(classIdx) - len(deleteIdx) < min:
+                    randIdx = np.random.randint(len(deleteIdx))
+                    deleteIdx.pop(randIdx)
+                self.vec = np.delete(self.vec,deleteIdx,axis=0)
+                self.classes = [self.classes[idx] for idx in range(len(self.classes)) if idx not in deleteIdx]
+                self.clusters = [self.clusters[idx] for idx in range(len(self.clusters)) if idx not in deleteIdx] 
             
             
             
