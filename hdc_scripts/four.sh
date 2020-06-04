@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#SBATCH --job-name=single_trial
+#SBATCH --job-name=four_trial
 #SBATCH --partition=savio2_htc
 #SBATCH --account=fc_flexemg
 #SBATCH --nodes=1
@@ -12,4 +12,4 @@
 #
 module load python/3.6
 source activate hdc
-python single_trial
+python four_trial.py > four_trial.pyout

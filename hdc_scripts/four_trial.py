@@ -25,11 +25,11 @@ D = 10000
 numFeat = 320
 
 
-numIter = 1
-# testPercentage = np.linspace(0.05,1,20)
-# adaptThreshold = np.linspace(0.05,0.8,16)
-testPercentage = np.linspace(0.1,0.8,2)
-adaptThreshold = np.linspace(0.2,0.5,2)
+numIter = 50
+testPercentage = np.linspace(0.05,1,20)
+adaptThreshold = np.linspace(0.05,0.8,16)
+# testPercentage = np.linspace(0.1,0.8,2)
+# adaptThreshold = np.linspace(0.2,0.5,2)
 
 numSVM = np.zeros((5,len(testPercentage),numIter))
 accSVM = np.zeros((5,len(testPercentage),numIter))
@@ -167,4 +167,4 @@ matOut['accSVM'] = accSVM
 matOut['accHDC'] = accHDC
 matOut['numSVM'] = numSVM
 matOut['numHDC'] = numHDC
-sio.savemat('single_trial_adapt.mat',matOut)
+sio.savemat('four_trial_adapt.mat',matOut)
