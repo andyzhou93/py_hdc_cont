@@ -25,7 +25,7 @@ D = 10000
 numFeat = 320
 
 
-numIter = 50
+numIter = 1
 testPercentage = np.linspace(0.05,1,20)
 adaptThreshold = np.linspace(0.05,0.8,16)
 # testPercentage = np.linspace(0.1,0.8,2)
@@ -41,6 +41,7 @@ accHDC = np.zeros((5,len(testPercentage),len(adaptThreshold),numIter))
 for s in range(5):
     subject = s + 1
     print('Gathering data for Subject ' + str(subject))
+    startTime = time.time()
 
     # load data from the two contexts
     filename = dataDir + 'S' + str(subject) + 'E' + str(baseExperiment) + '.mat'
@@ -98,6 +99,10 @@ for s in range(5):
     ngramData['gesture'] = labels
     ngramData['trial'] = trials
     ngramData['context'] = context
+
+    stopTime = time.time()
+    elapsedTime = stopTime - starttime
+    print('\tTook %f seconds') % (elapsedTime))
 
     # loop through different testing percentages
     for tpIdx,tp in enumerate(testPercentage):
