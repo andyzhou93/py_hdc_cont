@@ -24,12 +24,14 @@ numEx = holdEnd - holdStart + 1
 D = 10000
 numFeat = 320
 
+numTrial = 5
+numGest = 13
 
-numIter = 1
+numIter = 3
 # testPercentage = np.linspace(0.05,1,20)
 # adaptThreshold = np.linspace(0.05,0.8,16)
-testPercentage = np.linspace(0.1,0.8,2)
-adaptThreshold = np.linspace(0.2,0.5,2)
+testPercentage = np.linspace(0.1,1,2)
+adaptThreshold = np.linspace(0.2,0.7,2)
 
 numSVM = np.zeros((5,len(testPercentage),numIter))
 accSVM = np.zeros((5,len(testPercentage),numIter))
@@ -43,62 +45,9 @@ for s in range(5):
     print('Gathering data for Subject ' + str(subject))
 
     startTime = time.time()
-    # load data from the two contexts
-    filename = dataDir + 'S' + str(subject) + 'E' + str(baseExperiment) + '.mat'
-    base = sio.loadmat(filename)['emgHD']
-    filename = dataDir + 'S' + str(subject) + 'E' + str(newExperiment) + '.mat'
-    new = sio.loadmat(filename)['emgHD']
 
-    # get metatdata
-    numGest, numTrial = base.shape
-    numCh = base[0,0][2].shape[1]
-
-    # collect all data and as single dataframe
-    features = np.empty((numCh*5,0))
-    ngrams = np.empty((D,0))
-    labels = np.empty(0)
-    trials = np.empty(0)
-    context = np.empty(0)
-
-    # collect baseline data
-    for g in range(numGest):
-        for t in range(numTrial):
-            trial = base[g,t]
-            feat = np.empty((0,numEx))
-            for i in range(5):
-                feat = np.concatenate((feat,trial[2][(holdStart+i):(holdEnd+i+1),:].T),axis=0)
-            features = np.concatenate((features,feat),axis=1)
-            ngrams = np.concatenate((ngrams,trial[3][:,holdStart:holdEnd+1]),axis=1)
-            labels = np.concatenate((labels,g*np.ones(numEx)))
-            trials = np.concatenate((trials,t*np.ones(numEx)))
-            context = np.concatenate((context,0*np.ones(numEx)))
-
-    # collect new data
-    for g in range(numGest):
-        for t in range(numTrial):
-            trial = new[g,t]
-            feat = np.empty((0,numEx))
-            for i in range(5):
-                feat = np.concatenate((feat,trial[2][(holdStart+i):(holdEnd+i+1),:].T),axis=0)
-            features = np.concatenate((features,feat),axis=1)
-            ngrams = np.concatenate((ngrams,trial[3][:,holdStart:holdEnd+1]),axis=1)
-            labels = np.concatenate((labels,g*np.ones(numEx)))
-            trials = np.concatenate((trials,t*np.ones(numEx)))
-            context = np.concatenate((context,1*np.ones(numEx)))
-
-    # create dataframe for features
-    featCols = ['feature' + str(i) for i in range(features.shape[0])]
-    featData = pd.DataFrame(features.T,columns=featCols)
-    featData['gesture'] = labels
-    featData['trial'] = trials
-    featData['context'] = context
-
-    # create dataframe for ngrams
-    ngramCols = ['hv' + str(i) for i in range(ngrams.shape[0])]
-    ngramData = pd.DataFrame(ngrams.T,columns=ngramCols)
-    ngramData['gesture'] = labels
-    ngramData['trial'] = trials
-    ngramData['context'] = context
+    ngramData = pd.read_feather('S' + str(subject) + '_ngram.df')
+    featData = pd.read_feather('S' + str(subject) + '_feature.df')
 
     stopTime = time.time()
     elapsedTime = stopTime - startTime
