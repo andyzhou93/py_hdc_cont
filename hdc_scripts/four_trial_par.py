@@ -10,7 +10,8 @@ import hdc
 import time
 
 import sys
-numIter = int(sys.argv[1])
+s = int(sys.argv[1])
+numIter = int(sys.argv[2])
 
 def runIterSeeded(seed):
     import numpy as np
@@ -103,49 +104,45 @@ numTrial = 5
 testPercentage = np.linspace(0.1,1,2)
 adaptThreshold = np.linspace(0.2,0.65,2)
 
-numSVM = np.zeros((5,len(testPercentage),numIter))
-accSVM = np.zeros((5,len(testPercentage),numIter))
+numSVM = np.zeros((len(testPercentage),numIter))
+accSVM = np.zeros((len(testPercentage),numIter))
 
-numHDC = np.zeros((5,len(testPercentage),len(adaptThreshold),numIter))
-accHDC = np.zeros((5,len(testPercentage),len(adaptThreshold),numIter))
+numHDC = np.zeros((len(testPercentage),len(adaptThreshold),numIter))
+accHDC = np.zeros((len(testPercentage),len(adaptThreshold),numIter))
 
-# subject labels are 1-indexed
-# for s in range(5):
-for s in [1]:
-    subject = s + 1
+subject = s + 1
+runData = {}
+runData['numTrial'] = numTrial
+runData['numGest'] = numGest
+runData['numEx'] = numEx
+runData['adaptThreshold'] = adaptThreshold
+runData['D'] = D
+runData['numFeat'] = numFeat
+runData['subject'] = subject
+dview.push(runData,block=True)
 
-    runData = {}
-    runData['numTrial'] = numTrial
-    runData['numGest'] = numGest
-    runData['numEx'] = numEx
-    runData['adaptThreshold'] = adaptThreshold
-    runData['D'] = D
-    runData['numFeat'] = numFeat
-    runData['subject'] = subject
-    dview.push(runData,block=True)
+# loop through different testing percentages
+for tpIdx,tp in enumerate(testPercentage):
+    dview.push({'tp':tp},block=True)
 
-    # loop through different testing percentages
-    for tpIdx,tp in enumerate(testPercentage):
-        dview.push({'tp':tp},block=True)
+    lview = client.load_balanced_view()
+    lview.block = True
 
-        lview = client.load_balanced_view()
-        lview.block = True
+    print('Running with %f of single trial for training' % (tp))
+    startTime = time.time()
+    res = lview.map(runIterSeeded, range(numIter))
+    stopTime = time.time()
+    print('\tTook %f seconds total, %f per iteration' % ((stopTime - startTime), (stopTime - startTime)/numIter))
 
-        print('Running with %f of single trial for training' % (tp))
-        startTime = time.time()
-        res = lview.map(runIterSeeded, range(numIter))
-        stopTime = time.time()
-        print('\tTook %f seconds total, %f per iteration' % ((stopTime - startTime), (stopTime - startTime)/numIter))
-
-        for i in range(numIter):
-            accSVM[s,tpIdx,i] = res[i][2]
-            numSVM[s,tpIdx,i] = res[i][3]
-            accHDC[s,tpIdx,:,i] = res[i][0]
-            numHDC[s,tpIdx,:,i] = res[i][1]
+    for i in range(numIter):
+        accSVM[tpIdx,i] = res[i][2]
+        numSVM[tpIdx,i] = res[i][3]
+        accHDC[tpIdx,:,i] = res[i][0]
+        numHDC[tpIdx,:,i] = res[i][1]
 
 matOut = {}
 matOut['accSVM'] = accSVM
 matOut['accHDC'] = accHDC
 matOut['numSVM'] = numSVM
 matOut['numHDC'] = numHDC
-sio.savemat('four_trial_adapt_' + str(numIter) + 'iters.mat',matOut)
+sio.savemat('./output/four_trial_adapt_sub' + str(subject) + '_' + str(numIter) + 'iters.mat',matOut)
