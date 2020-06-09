@@ -1,0 +1,37 @@
+2020-06-08 16:01:44.287 [IPClusterStart] Removing pid file: /global/home/users/andyz/.ipython/profile_default/pid/ipcluster.pid
+2020-06-08 16:01:44.299 [IPClusterStart] Starting ipcluster with [daemon=False]
+2020-06-08 16:01:44.304 [IPClusterStart] Creating pid file: /global/home/users/andyz/.ipython/profile_default/pid/ipcluster.pid
+2020-06-08 16:01:44.309 [IPClusterStart] Starting Controller with LocalControllerLauncher
+2020-06-08 16:01:45.312 [IPClusterStart] Starting 32 Engines with LocalEngineSetLauncher
+2020-06-08 16:02:19.559 [IPClusterStart] Engines appear to have started successfully
+Running with 0.100000 of single trial for training
+	Took 7.666113 seconds total, 7.666113 per iteration
+Running with 1.000000 of single trial for training
+	Took 16.920705 seconds total, 16.920705 per iteration
+Running with 0.100000 of single trial for training
+	Took 10.811857 seconds total, 5.405928 per iteration
+Running with 1.000000 of single trial for training
+	Took 31.712687 seconds total, 15.856343 per iteration
+Running with 0.100000 of single trial for training
+	Took 18.298728 seconds total, 4.574682 per iteration
+Running with 1.000000 of single trial for training
+	Took 62.739532 seconds total, 15.684883 per iteration
+Running with 0.100000 of single trial for training
+	Took 42.050753 seconds total, 5.256344 per iteration
+Running with 1.000000 of single trial for training
+	Took 134.892835 seconds total, 16.861604 per iteration
+Running with 0.100000 of single trial for training
+	Took 28.623184 seconds total, 1.788949 per iteration
+Running with 1.000000 of single trial for training
+	Took 190.183958 seconds total, 11.886497 per iteration
+Running with 0.100000 of single trial for training
+	Took 50.212428 seconds total, 1.569138 per iteration
+Running with 1.000000 of single trial for training
+	Took 431.534297 seconds total, 13.485447 per iteration
+Running with 0.100000 of single trial for training
+	Took 95.486845 seconds total, 1.491982 per iteration
+Running with 1.000000 of single trial for training
+	Took 874.614677 seconds total, 13.665854 per iteration
+2020-06-08 16:37:41.682 [IPClusterStop] Stopping cluster [pid=25033] with [signal=<Signals.SIGINT: 2>]
+2020-06-08 16:37:41.683 [IPClusterStart] ERROR | IPython cluster: stopping
+2020-06-08 16:37:41.683 [IPClusterStart] Stopping Engines...

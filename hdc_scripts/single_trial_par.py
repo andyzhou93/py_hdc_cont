@@ -19,7 +19,8 @@ def runIterSeeded(seed):
     from sklearn.metrics import accuracy_score
 
     import sys
-    sys.path.append('/Users/andy/Research/py_hdc_cont/hdc_scripts')
+    # sys.path.append('/Users/andy/Research/py_hdc_cont/hdc_scripts')
+    sys.path.append('/global/home/users/andyz/py_hdc_cont/hdc_scripts')
 
     import hdc
 
@@ -41,8 +42,11 @@ def runIterSeeded(seed):
             else:
                 isTrain = np.concatenate((isTrain,np.zeros(numEx)))
 
-    featData = pd.read_feather('/Users/andy/Research/py_hdc_cont/hdc_scripts/S' + str(subject) + '_feature.df')
-    ngramData = pd.read_feather('/Users/andy/Research/py_hdc_cont/hdc_scripts/S' + str(subject) + '_ngram.df')
+    # featData = pd.read_feather('/Users/andy/Research/py_hdc_cont/hdc_scripts/S' + str(subject) + '_feature.df')
+    # ngramData = pd.read_feather('/Users/andy/Research/py_hdc_cont/hdc_scripts/S' + str(subject) + '_ngram.df')
+
+    featData = pd.read_feather('/global/home/users/andyz/py_hdc_cont/hdc_scripts/S' + str(subject) + '_feature.df')
+    ngramData = pd.read_feather('/global/home/users/andyz/py_hdc_cont/hdc_scripts/S' + str(subject) + '_ngram.df')
 
     featData['isTrain'] = isTrain
     ngramData['isTrain'] = isTrain
@@ -97,8 +101,8 @@ numTrial = 5
 
 # testPercentage = np.linspace(0.05,1,20)
 # adaptThreshold = np.linspace(0.05,0.8,16)
-testPercentage = np.linspace(0.1,0.8,2)
-adaptThreshold = np.linspace(0.2,0.5,2)
+testPercentage = np.linspace(0.1,1,2)
+adaptThreshold = np.linspace(0.2,0.65,2)
 
 numSVM = np.zeros((5,len(testPercentage),numIter))
 accSVM = np.zeros((5,len(testPercentage),numIter))
@@ -132,7 +136,7 @@ for s in [1]:
         startTime = time.time()
         res = lview.map(runIterSeeded, range(numIter))
         stopTime = time.time()
-        print('\tTook %f seconds' % (stopTime - startTime))
+        print('\tTook %f seconds total, %f per iteration' % ((stopTime - startTime), (stopTime - startTime)/numIter))
 
         for i in range(numIter):
             accSVM[s,tpIdx,i] = res[i][2]
@@ -145,4 +149,4 @@ matOut['accSVM'] = accSVM
 matOut['accHDC'] = accHDC
 matOut['numSVM'] = numSVM
 matOut['numHDC'] = numHDC
-sio.savemat('single_trial_adapt.mat',matOut)
+sio.savemat('single_trial_adapt_' + str(numIter) + 'iters.mat',matOut)
