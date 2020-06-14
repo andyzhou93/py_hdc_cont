@@ -23,10 +23,11 @@ numFeat = 320
 numGest = 13
 numTrial = 5
 
-# testPercentage = np.linspace(0.05,1,20)
-# adaptThreshold = np.linspace(0.05,0.8,16)
-testPercentage = np.linspace(0.1,1,2)
-adaptThreshold = np.linspace(0.2,0.65,2)
+#testPercentage = np.linspace(0.05,1,20)
+testPercentage = np.linspace(0.05,0.5,10)
+adaptThreshold = np.linspace(0.1,0.8,8)
+#testPercentage = np.linspace(0.1,1,2)
+#adaptThreshold = np.linspace(0.2,0.65,2)
 
 numSVM = np.zeros((len(testPercentage),numIter))
 accSVM = np.zeros((len(testPercentage),numIter))
