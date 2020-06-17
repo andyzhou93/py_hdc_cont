@@ -313,8 +313,9 @@ class Memory:
         y = np.outer(np.linalg.norm(v.T,axis=0), np.linalg.norm(am.T,axis=0))
         sim = x/y
         maxIdx = np.argmax(sim,axis=1)
-        label = [self.classes[i] for i in maxIdx]
-        return label, sim
+        predClass = [self.classes[i] for i in maxIdx]
+        predClust = [self.clusters[i] for i in maxIdx]
+        return predClass, predClust, sim
 
 
     # train by adaptively writing new examples as new prototypes
