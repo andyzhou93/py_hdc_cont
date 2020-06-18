@@ -45,7 +45,7 @@ function [] = plot_grid_results(acc)
     numCombs = size(acc,1);
     numPositions = size(acc,2);
     
-    imagesc(acc)
+    imagesc(acc,[0 100])
     axis equal
     axis off
     xticks([])
