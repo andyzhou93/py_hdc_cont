@@ -10,7 +10,9 @@ numTrainPositions = int(sys.argv[1])
 numIters = int(sys.argv[2])
 matName = sys.argv[3]
 
-dataFile = '/Users/andy/Research/py_hdc_cont/emg_mat/armPosition/sub1exp0.mat'
+# dataFile = '/Users/andy/Research/py_hdc_cont/emg_mat/armPosition/sub1exp0.mat'
+dataFile = '/global/home/users/andyz/py_hdc_cont/emg_mat/armPosition/sub1exp0.mat'
+
 # file is saved in hdf5 format
 file = h5py.File(dataFile,'r')
 experimentData = file['experimentData']
@@ -104,4 +106,4 @@ matOut['clustCorrectHits'] = clustCorrectHits
 matOut['clustIncorrectHits'] = clustIncorrectHits
 matOut['trainCombinations'] = trainCombinations
 
-sio.savemat(matName,matOut)
+sio.savemat('./outputs/' + matName,matOut)
