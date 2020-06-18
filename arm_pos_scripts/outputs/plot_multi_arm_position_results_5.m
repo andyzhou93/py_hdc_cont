@@ -2,14 +2,15 @@ close all
 clear
 clc
 
-load('arm_position_5.mat')
+% load('ap_5.mat')
+load('ap_rand_5.mat')
 
 figure('Name','HDC accuracy','NumberTitle','off')
 set(gcf,'Position',[1331 835 454 358])
 plot_grid_results(meanHDAcc.*100);
-figure('Name','SVM accuracy','NumberTitle','off')
-set(gcf,'Position',[1331 835 454 358])
-plot_grid_results(meanSVMAcc.*100);
+% figure('Name','SVM accuracy','NumberTitle','off')
+% set(gcf,'Position',[1331 835 454 358])
+% plot_grid_results(meanSVMAcc.*100);
 
 numCombs = size(clustHits,1);
 numPositions = size(clustHits,2);
