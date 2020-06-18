@@ -16,4 +16,4 @@ module load gnu-parallel/2019.03.22
 
 export HDF5_USE_FILE_LOCKING='FALSE'
 
-parallel --progress --jobs 10 < gnu_test.txt
+parallel --progress --jobs 10 < gnu_jobs.txt
