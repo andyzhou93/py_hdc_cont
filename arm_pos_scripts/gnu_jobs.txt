@@ -1,5 +1,10 @@
-python train_multi_arm_position_accel.py 1 30 ap_accel_1.mat
-python train_multi_arm_position_accel.py 2 30 ap_accel_2.mat
-python train_multi_arm_position_accel.py 3 30 ap_accel_3.mat
-python train_multi_arm_position_accel.py 4 30 ap_accel_4.mat
-python train_multi_arm_position_accel.py 5 30 ap_accel_5.mat
+python train_multi_arm_position_accel.py 1 30 8 ap_accel8_1.mat
+python train_multi_arm_position_accel.py 2 30 8 ap_accel8_2.mat
+python train_multi_arm_position_accel.py 3 30 8 ap_accel8_3.mat
+python train_multi_arm_position_accel.py 4 30 8 ap_accel8_4.mat
+python train_multi_arm_position_accel.py 5 30 8 ap_accel8_5.mat
+python train_multi_arm_position_accel.py 1 30 128 ap_accel128_1.mat
+python train_multi_arm_position_accel.py 2 30 128 ap_accel128_2.mat
+python train_multi_arm_position_accel.py 3 30 128 ap_accel128_3.mat
+python train_multi_arm_position_accel.py 4 30 128 ap_accel128_4.mat
+python train_multi_arm_position_accel.py 5 30 128 ap_accel128_5.mat
