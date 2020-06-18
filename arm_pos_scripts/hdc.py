@@ -319,7 +319,7 @@ class Memory:
 
 
     # train by adaptively writing new examples as new prototypes
-    def train_sub_cluster(self, v, vClass, threshold=0.6):
+    def train_sub_cluster(self, v, vClass, threshold=0.55):
         # make sure type is correct
         if not isinstance(v, (Vector, np.ndarray)):
             raise TypeError("Unsupported type for vector space")

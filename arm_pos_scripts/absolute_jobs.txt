@@ -1,0 +1,30 @@
+python absolute_accelerometer_automatic.py 1 4
+python absolute_accelerometer_automatic.py 1 16
+python absolute_accelerometer_automatic.py 1 64
+python absolute_accelerometer_automatic.py 5 4
+python absolute_accelerometer_automatic.py 5 16
+python absolute_accelerometer_automatic.py 5 64
+python absolute_accelerometer_separate.py 1 4
+python absolute_accelerometer_separate.py 1 16
+python absolute_accelerometer_separate.py 1 64
+python absolute_accelerometer_separate.py 5 4
+python absolute_accelerometer_separate.py 5 16
+python absolute_accelerometer_separate.py 5 64
+python absolute_accelerometer_single.py 1 4
+python absolute_accelerometer_single.py 1 16
+python absolute_accelerometer_single.py 1 64
+python absolute_accelerometer_single.py 5 4
+python absolute_accelerometer_single.py 5 16
+python absolute_accelerometer_single.py 5 64
+python absolute_none_automatic.py 1
+python absolute_none_automatic.py 5
+python absolute_none_separate.py 1
+python absolute_none_separate.py 5
+python absolute_none_single.py 1
+python absolute_none_single.py 5
+python absolute_random_automatic.py 1
+python absolute_random_automatic.py 5
+python absolute_random_separate.py 1
+python absolute_random_separate.py 5
+python absolute_random_single.py 1
+python absolute_random_single.py 5

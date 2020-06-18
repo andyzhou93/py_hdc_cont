@@ -2,8 +2,7 @@ close all
 clear
 clc
 
-% load('ap_5.mat')
-load('ap_rand_5.mat')
+load('relative_none_separate_5.mat')
 
 figure('Name','HDC accuracy','NumberTitle','off')
 set(gcf,'Position',[1331 835 454 358])
