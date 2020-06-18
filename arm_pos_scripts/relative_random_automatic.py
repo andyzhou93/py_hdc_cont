@@ -8,7 +8,7 @@ import scipy.io as sio
 import sys
 numTrainPositions = int(sys.argv[1])
 numIters = 30
-matName = 'relative_random_automatic_' + sys.argv[1]
+matName = 'relative_random_automatic_' + sys.argv[1] + '.mat'
 
 # dataFile = '/Users/andy/Research/py_hdc_cont/emg_mat/armPosition/sub1exp0.mat'
 dataFile = '/global/home/users/andyz/py_hdc_cont/emg_mat/armPosition/sub1exp0_emgCIM.mat'
