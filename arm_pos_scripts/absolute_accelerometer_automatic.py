@@ -8,7 +8,7 @@ import scipy.io as sio
 import sys
 numTrainPositions = int(sys.argv[1])
 numIters = 30
-matName = 'absolute_accelerometer_automatic_' + sys.argv[1]
+matName = 'absolute_accelerometer_automatic_' + sys.argv[1] + '_' + sys.argv[2] + '.mat'
 cimLevels = sys.argv[2]
 
 # dataFile = '/Users/andy/Research/py_hdc_cont/emg_mat/armPosition/sub1exp0.mat'
