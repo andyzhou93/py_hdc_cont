@@ -21,8 +21,8 @@ else:
 
 autoThreshold = float(autoThreshold/100)
 
-dataFile = '/Users/andy/Research/py_hdc_cont/emg_mat/armPosition/' + imType + '_hv.mat'
-# dataFile = '/global/home/users/andyz/py_hdc_cont/emg_mat/armPosition/' + imType + '_hv.mat'
+# dataFile = '/Users/andy/Research/py_hdc_cont/emg_mat/armPosition/' + imType + '_hv.mat'
+dataFile = '/global/home/users/andyz/py_hdc_cont/emg_mat/armPosition/' + imType + '_hv.mat'
 
 # file is saved in hdf5 format
 file = h5py.File(dataFile,'r')
@@ -114,4 +114,4 @@ if clusterType == 'separate' or clusterType == 'auto':
     matOut['clustCorrectHits'] = clustCorrectHits
     matOut['clustIncorrectHits'] = clustIncorrectHits
     
-sio.savemat('./outputs/' + matName, matOut)
+sio.savemat('./outputs_new/' + matName, matOut)
