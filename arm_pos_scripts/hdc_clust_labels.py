@@ -355,7 +355,7 @@ class Memory:
         if classIdx:
             if v.ndim > 1:
                 for i in range(v.shape[0]):
-                    label, clustDummy, sim = self.match(v[i,:])
+                    label, clustDummy, clustDummy2, sim = self.match(v[i,:])
                     sim = sim[0,classIdx]
                     bestMatch = np.argmax(sim)
                     if sim[bestMatch] > threshold:
@@ -368,7 +368,7 @@ class Memory:
                         self.vec = np.concatenate((self.vec, [v[i,:]]))
                     classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
             else:
-                label, clustDummy, sim = self.match(v)
+                label, clustDummy, clustDummy2, sim = self.match(v)
                 sim = sim[0,classIdx]
                 bestMatch = np.argmax(sim)
                 if sim[bestMatch] > threshold:
@@ -387,7 +387,7 @@ class Memory:
                 self.vec = np.concatenate((self.vec, [v[0,:]]))
                 for i in range(1,v.shape[0]):
                     classIdx = [idx for idx, val in enumerate(self.classes) if val == vClass]
-                    label, clustDummy, sim = self.match(v[i,:])
+                    label, clustDummy, clustDummy2, sim = self.match(v[i,:])
                     sim = sim[0,classIdx]
                     bestMatch = np.argmax(sim)
                     if sim[bestMatch] > threshold:
