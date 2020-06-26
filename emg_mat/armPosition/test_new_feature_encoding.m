@@ -4,7 +4,7 @@ clc
 
 load('sub1exp0_accHV.mat');
 
-holdFeat = [experimentData.emgFeat];
+holdFeat = [experimentData(:,1,:).emgFeat];
 
 %%
 figure

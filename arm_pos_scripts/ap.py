@@ -6,7 +6,7 @@ from itertools import combinations
 import scipy.io as sio
 
 import sys
-imType = sys.argv[1] # randIM circIM
+imType = sys.argv[1] # sub1exp0
 emgHVType = sys.argv[2] # emgHV emgHV64 emgHVCAR emgHVCARNorm emgHVCARRel emgHVCARZeroed emgHVNorm emgHVRel emgHVZeroed
 contextType = sys.argv[3] # none random accel
 clusterType = sys.argv[4] # single separate auto

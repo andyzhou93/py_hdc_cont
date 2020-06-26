@@ -3,11 +3,14 @@ clear
 clc
 
 %% load up experiment data 
-load('sub1exp0_emgCIM.mat','experimentData');
+load('sub1exp1.mat','experimentData');
 [numGest, numPos, numTrial] = size(experimentData);
 D = size([experimentData.emgHV],1);
 cim = create_cim(64,D);
-im = load('../circ_im.mat').im;
+cim1 = create_cim(64,D);
+cim2 = create_cim(64,D);
+cim3 = create_cim(64,D);
+im = load('../im.mat').im;
 
 %% get normalized and relative features and encoded ngrams
 for p = 1:numPos
@@ -63,10 +66,24 @@ for p = 1:numPos
             experimentData(g,p,t).emgHVCARZeroed = int8(encode_spatiotemporal(experimentData(g,p,t).emgFeatCARZeroed,im));
         end
     end
+    accMax = 1.5;
+    for g = 1:numGest
+        for t = 1:numTrial
+            accFeat = experimentData(g,p,t).accMeanFeat;
+            accCIMIdx = floor(accFeat.*64/(2*accMax)) + (64/2) + 1;
+            l = size(accCIMIdx,1);
+            accHV = zeros(D,l);
+            for i = 1:l
+                accHV(:,i) = cim1(:,accCIMIdx(i,1)).*cim2(:,accCIMIdx(i,2)).*cim3(:,accCIMIdx(i,3));
+            end
+            experimentData(g,p,t).(['accHV64']) = int8(accHV);
+        end
+    end
+    
 end
 
-experimentData = rmfield(experimentData,{'emgRaw','accRaw','emgFeat','accMeanFeat','accStdFeat','accHV4','accHV8','accHV16','accHV32','accHV128','emgHV4','emgHV16','emgFeatNorm','emgFeatRel','emgFeatZeroed','emgFeatCAR','emgFeatCARNorm','emgFeatCARRel','emgFeatCARZeroed'});
-save('circIM_hv','experimentData','-v7.3')
+experimentData = rmfield(experimentData,{'emgRaw','accRaw','emgFeat','accMeanFeat','accStdFeat','emgFeatNorm','emgFeatRel','emgFeatZeroed','emgFeatCAR','emgFeatCARNorm','emgFeatCARRel','emgFeatCARZeroed'});
+save('sub1exp1_hv','experimentData','-v7.3')
 
 %% useful functions
 function [cim] = create_cim(n,D)
