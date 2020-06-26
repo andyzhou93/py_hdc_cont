@@ -47,6 +47,9 @@ if clusterType == 'separate' or clusterType == 'auto':
     clustCorrectHits = np.zeros((numCombinations,numPositions,numPositions))
     clustIncorrectHits = np.zeros((numCombinations,numPositions,numPositions))
 
+if clusterType == 'separate':
+    prototypeSims = np.zeros((numCombinations, numTrainPositions*numGestures, numTrainPositions*numGestures))
+
 for apComb in range(numCombinations):
     for apTest in range(numPositions):
         hdAcc = []
@@ -79,6 +82,9 @@ for apComb in range(numCombinations):
             
             if clusterType == 'auto':
                 AM.prune(min=numTrainPositions)
+
+            if clusterType == 'separate':
+                prototypeSims[apComb,:,:] += AM.match(AM.vec)[-1]/numIters
                 
             # test AM
             for g in range(numGestures):
@@ -113,5 +119,7 @@ if clusterType == 'separate' or clusterType == 'auto':
     matOut['clustHits'] = clustHits
     matOut['clustCorrectHits'] = clustCorrectHits
     matOut['clustIncorrectHits'] = clustIncorrectHits
+if clusterType == 'separate':
+    matOut['prototypeSims'] = prototypeSims
     
-sio.savemat('./outputs_new/' + matName, matOut)
+sio.savemat('./outputs_proto_sim/' + matName, matOut)
