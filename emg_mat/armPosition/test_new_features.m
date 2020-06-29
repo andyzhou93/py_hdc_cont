@@ -3,7 +3,7 @@ clear
 clc
 
 %% load up experiment data 
-load('sub1exp1.mat','experimentData');
+load('sub1exp0.mat','experimentData');
 [numGest, numPos, numTrial] = size(experimentData);
 D = size([experimentData.emgHV],1);
 cim = create_cim(64,D);
@@ -82,8 +82,10 @@ for p = 1:numPos
     
 end
 
-experimentData = rmfield(experimentData,{'emgRaw','accRaw','emgFeat','accMeanFeat','accStdFeat','emgFeatNorm','emgFeatRel','emgFeatZeroed','emgFeatCAR','emgFeatCARNorm','emgFeatCARRel','emgFeatCARZeroed'});
-save('sub1exp1_hv','experimentData','-v7.3')
+save('sub1exp0_all','experimentData','-v7.3')
+
+% experimentData = rmfield(experimentData,{'emgRaw','accRaw','emgFeat','accMeanFeat','accStdFeat','emgFeatNorm','emgFeatRel','emgFeatZeroed','emgFeatCAR','emgFeatCARNorm','emgFeatCARRel','emgFeatCARZeroed'});
+% save('sub1exp1_hv','experimentData','-v7.3')
 
 %% useful functions
 function [cim] = create_cim(n,D)
