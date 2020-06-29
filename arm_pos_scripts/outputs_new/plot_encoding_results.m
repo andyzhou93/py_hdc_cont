@@ -5,7 +5,8 @@ clc
 allFiles = dir('./*.mat');
 fileNames = {allFiles.name}';
 
-for f = 1:length(fileNames)
+% for f = 1:length(fileNames)
+for f = 73
     get_figures(fileNames{f});
     close all
 end
@@ -43,7 +44,7 @@ function [] = get_figures(file)
         end
     end
     
-    print(['./figs/' file(1:end-4) '_acc'],'-dsvg')
+%     print(['./figs/' file(1:end-4) '_acc'],'-dsvg')
     
     figure('Name','Classification accuracy','NumberTitle','off')
     bar100 = 100;
@@ -61,7 +62,7 @@ function [] = get_figures(file)
     xticklabels({'100 percent', 'Within position', 'Across position'})
     xtickangle(60)
     
-    print(['./figs/' file(1:end-4) '_acc_bar'],'-dsvg')
+%     print(['./figs/' file(1:end-4) '_acc_bar'],'-dsvg')
     
     %% cluster hits figure
     if isfield(res,'clustHits') && (numCombs == 1)
@@ -148,7 +149,7 @@ function [] = get_figures(file)
             end
         end
         
-        print(['./figs/' file(1:end-4) '_clust'],'-dsvg')
+%         print(['./figs/' file(1:end-4) '_clust'],'-dsvg')
 
         figure('Name','Cluster hits during inference','NumberTitle','off')
 
@@ -177,11 +178,11 @@ function [] = get_figures(file)
             pCorrectgMiss = (1-pHitgCorrect).*pCorrect./(1-pHit);
             
             bar100 = 1;
-            bar([bar100 mean(pHit) mean(pCorrect) mean(pHitgCorrect) mean(pHitgIncorrect) mean(pCorrectgHit) mean(pCorrectgMiss)])
+            bar([bar100 nanmean(pHit) nanmean(pCorrect) nanmean(pHitgCorrect) nanmean(pHitgIncorrect) nanmean(pCorrectgHit) nanmean(pCorrectgMiss)])
             xticklabels({'100 percent', 'P(Hit)', 'P(Correct)', 'P(Hit | Correct)', 'P(Hit | Incorrect)', 'P(Correct | Hit)', 'P(Correct | Miss)'})
             xtickangle(60)
         end
         
-        print(['./figs/' file(1:end-4) '_clust_bar'],'-dsvg')
+%         print(['./figs/' file(1:end-4) '_clust_bar'],'-dsvg')
     end
 end

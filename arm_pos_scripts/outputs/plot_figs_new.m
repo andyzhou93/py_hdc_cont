@@ -177,7 +177,7 @@ function [] = get_figures(file)
             pCorrectgMiss = (1-pHitgCorrect).*pCorrect./(1-pHit);
             
             bar100 = 1;
-            bar([bar100 mean(pHit) mean(pCorrect) mean(pHitgCorrect) mean(pHitgIncorrect) mean(pCorrectgHit) mean(pCorrectgMiss)])
+            bar([bar100 nanmean(pHit) nanmean(pCorrect) nanmean(pHitgCorrect) nanmean(pHitgIncorrect) nanmean(pCorrectgHit) nanmean(pCorrectgMiss)])
             xticklabels({'100 percent', 'P(Hit)', 'P(Correct)', 'P(Hit | Correct)', 'P(Hit | Incorrect)', 'P(Correct | Hit)', 'P(Correct | Miss)'})
             xtickangle(60)
         end
