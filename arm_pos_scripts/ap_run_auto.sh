@@ -5,7 +5,7 @@
 #SBATCH --account=fc_flexemg
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=30
-#SBATCH --time=71:30:00
+#SBATCH --time=15:30:00
 #SBATCH --mail-type=all
 #SBATCH --mail-user=andyz@berkeley.edu
 #
