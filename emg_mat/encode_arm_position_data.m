@@ -5,7 +5,7 @@ clc
 rawDir = '~/Research/gui_lite/gui-lite/data/';
 
 subject = 1;
-experiment = 1;
+experiment = 2;
 
 % get all files associated with this subject and experiment
 files = dir([rawDir 'S' num2str(subject,'%03d') '_E' num2str(experiment,'%03d') '*.mat']);
