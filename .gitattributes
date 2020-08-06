@@ -2,3 +2,4 @@
 *.df filter=lfs diff=lfs merge=lfs -text
 emg_mat/**/*.mat filter=lfs diff=lfs merge=lfs -text
 *.npz filter=lfs diff=lfs merge=lfs -text
+*.npy filter=lfs diff=lfs merge=lfs -text
