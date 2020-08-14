@@ -5,10 +5,6 @@ import numpy as np
 from itertools import combinations
 import pickle
 
-# plotting
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 # calculations
 from sklearn.metrics import pairwise_distances
 from sklearn import metrics
@@ -369,10 +365,6 @@ numTrials = len(trials)
 # get data size info
 D = hv.shape[1] # hypervector dimension
 numHV = 80 # number of examples per trial
-
-# color palettes for plotting
-gPalette = sns.color_palette('Paired', numGestures)
-pPalette = sns.color_palette('Paired', numPositions)
 
 ### run clustering
 filt = gestLabel == g
