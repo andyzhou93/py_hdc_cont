@@ -1,0 +1,13 @@
+python run_hdc_clust_test.py 0
+python run_hdc_clust_test.py 1
+python run_hdc_clust_test.py 2
+python run_hdc_clust_test.py 3
+python run_hdc_clust_test.py 4
+python run_hdc_clust_test.py 5
+python run_hdc_clust_test.py 6
+python run_hdc_clust_test.py 7
+python run_hdc_clust_test.py 8
+python run_hdc_clust_test.py 9
+python run_hdc_clust_test.py 10
+python run_hdc_clust_test.py 11
+python run_hdc_clust_test.py 12
