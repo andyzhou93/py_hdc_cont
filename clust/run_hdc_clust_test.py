@@ -9,10 +9,6 @@ from sklearn import metrics
 from scipy.spatial.distance import cdist, pdist
 from scipy.cluster.hierarchy import linkage, fcluster
 
-# clustering
-from sklearn.cluster import AgglomerativeClustering, KMeans, DBSCAN, AffinityPropagation
-import hdbscan
-
 import sys
 g = int(sys.argv[1]) # gesture 0-12
 
@@ -151,7 +147,7 @@ tMin = find_best_thresh(X,2)[0]
 tMax = find_best_thresh(X,32)[0]
 tRange = np.linspace(tMin,tMax,30)
 
-nIter = 2
+nIter = 30
 standardOrder = []
 randPos = []
 randAll = []
