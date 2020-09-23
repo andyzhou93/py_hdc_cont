@@ -370,46 +370,46 @@ numHV = 80 # number of examples per trial
 filt = gestLabel == g
 X = hv[filt]
 
-l = labels_affinity_prop(X,verbose=True)
-with open('./clusters/labels_'+str(g)+'_affinity_prop.pickle','wb') as f:
-    pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
-
-l = labels_hdc(X,verbose=True,random=False)
-with open('./clusters/labels_'+str(g)+'_hdc.pickle','wb') as f:
-    pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
-
-l = labels_hdc(X,verbose=True,random=True)
-with open('./clusters/labels_'+str(g)+'_hdc_best.pickle','wb') as f:
-    pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
-
-l = labels_agglomerative(X,'ward','euclidean')
-with open('./clusters/labels_'+str(g)+'_agglomerative_w_e.pickle','wb') as f:
-    pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
-
-# with open('./clusters/labels_'+str(g)+'_test.pickle','wb') as f:
+# l = labels_affinity_prop(X,verbose=True)
+# with open('./clusters/labels_'+str(g)+'_affinity_prop.pickle','wb') as f:
 #     pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
 
-l = labels_agglomerative(X,'centroid','euclidean')
-with open('./clusters/labels_'+str(g)+'_agglomerative_c_e.pickle','wb') as f:
-    pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
+# l = labels_hdc(X,verbose=True,random=False)
+# with open('./clusters/labels_'+str(g)+'_hdc.pickle','wb') as f:
+#     pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
 
-l = labels_agglomerative(X,'median','euclidean')
-with open('./clusters/labels_'+str(g)+'_agglomerative_m_e.pickle','wb') as f:
-    pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
+# l = labels_hdc(X,verbose=True,random=True)
+# with open('./clusters/labels_'+str(g)+'_hdc_best.pickle','wb') as f:
+#     pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
+
+# l = labels_agglomerative(X,'ward','euclidean')
+# with open('./clusters/labels_'+str(g)+'_agglomerative_w_e.pickle','wb') as f:
+#     pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
+
+# # with open('./clusters/labels_'+str(g)+'_test.pickle','wb') as f:
+# #     pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
+
+# l = labels_agglomerative(X,'centroid','euclidean')
+# with open('./clusters/labels_'+str(g)+'_agglomerative_c_e.pickle','wb') as f:
+#     pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
+
+# l = labels_agglomerative(X,'median','euclidean')
+# with open('./clusters/labels_'+str(g)+'_agglomerative_m_e.pickle','wb') as f:
+#     pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
 
 l = labels_agglomerative(X,'ward','hamming')
 with open('./clusters/labels_'+str(g)+'_agglomerative_w_h.pickle','wb') as f:
     pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
 
-l = labels_agglomerative(X,'centroid','hamming')
-with open('./clusters/labels_'+str(g)+'_agglomerative_c_h.pickle','wb') as f:
-    pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
+# l = labels_agglomerative(X,'centroid','hamming')
+# with open('./clusters/labels_'+str(g)+'_agglomerative_c_h.pickle','wb') as f:
+#     pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
 
-l = labels_agglomerative(X,'median','hamming')
-with open('./clusters/labels_'+str(g)+'_agglomerative_m_h.pickle','wb') as f:
-    pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
+# l = labels_agglomerative(X,'median','hamming')
+# with open('./clusters/labels_'+str(g)+'_agglomerative_m_h.pickle','wb') as f:
+#     pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
 
-l = labels_kmeans(X,verbose=True)
-with open('./clusters/labels_'+str(g)+'_kmeans.pickle','wb') as f:
-    pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
+# l = labels_kmeans(X,verbose=True)
+# with open('./clusters/labels_'+str(g)+'_kmeans.pickle','wb') as f:
+#     pickle.dump(l,f,pickle.HIGHEST_PROTOCOL)
 
