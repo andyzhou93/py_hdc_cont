@@ -157,4 +157,4 @@ if __name__ == "__main__":
                 pickle.dump(res, f, protocol=pickle.HIGHEST_PROTOCOL)
 
     with open('optimal_clustering_results.pickle', 'wb') as f:
-            pickle.dump(res, f, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res, f, protocol=pickle.HIGHEST_PROTOCOL)
